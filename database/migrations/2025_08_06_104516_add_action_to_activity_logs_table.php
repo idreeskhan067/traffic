@@ -10,17 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::table('activity_logs', function (Blueprint $table) {
-        $table->string('action')->nullable();
-    });
-}
+    {
+        Schema::table('activity_logs', function (Blueprint $table) {
+            $table->string('action')->nullable();
+        });
+    }
 
-public function down()
-{
-    Schema::table('activity_logs', function (Blueprint $table) {
-        $table->dropColumn('action');
-    });
-}
-
+    public function down()
+    {
+        if (Schema::hasColumn('activity_logs', 'action')) {
+            Schema::table('activity_logs', function (Blueprint $table) {
+                $table->dropColumn('action');
+            });
+        }
+    }
 };

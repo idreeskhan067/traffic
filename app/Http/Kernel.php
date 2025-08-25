@@ -2,33 +2,21 @@
 
 namespace App\Http;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
     /**
      * The application's global HTTP middleware stack.
-     *
-     * These middleware are run during every request to your application.
      */
     protected $middleware = [
-        // Trust proxies
-        \App\Http\Middleware\TrustProxies::class,
-
-        // Handle CORS
-        \Fruitcake\Cors\HandleCors::class,
-
-        // Prevents requests when the app is in maintenance mode
-        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
-
-        // Validates post size
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-
-        // Trims strings
+        // Standard Laravel middleware
+        \Illuminate\Http\Middleware\TrustHosts::class,
+        \Illuminate\Http\Middleware\TrustProxies::class,
+        \Illuminate\Http\Middleware\HandleCors::class, // ✅ Only keep Laravel's built-in CORS
+        \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
+        \Illuminate\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
-
-        // Converts empty strings to null
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
@@ -41,16 +29,16 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'api' => [
-            // Optional throttle
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
+'api' => [
+    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,  // <-- Add this
+    'throttle:api',
+    \Illuminate\Routing\Middleware\SubstituteBindings::class,
+],
+
     ];
 
     /**

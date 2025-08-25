@@ -14,7 +14,6 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
-            'device_name' => 'required|string',
         ]);
 
         $user = User::where('email', $request->email)->first();
