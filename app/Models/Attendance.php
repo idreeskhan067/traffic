@@ -11,10 +11,21 @@ class Attendance extends Model
 
     protected $fillable = [
         'user_id',
+        'status', 
+        'timestamp',
         'date',
-        'status', // present, absent, late, etc.
+        'check_in_time',
+        'check_out_time'
     ];
 
+    protected $casts = [
+        'timestamp' => 'datetime',
+        'check_in_time' => 'datetime',
+        'check_out_time' => 'datetime',
+        'date' => 'date'
+    ];
+
+    // 👇 Add this relationship
     public function user()
     {
         return $this->belongsTo(User::class);

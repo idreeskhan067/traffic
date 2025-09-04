@@ -17,13 +17,14 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet">
     <!-- Leaflet CSS -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-oEgtU8rH3L3DW2ZqYoRfCtLJxGPf9TrX0zQKB6lX2DA="
-  crossorigin=""
-/>
-
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-oEgtU8rH3L3DW2ZqYoRfCtLJxGPf9TrX0zQKB6lX2DA="
+      crossorigin=""
+    />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body class="canvas-menu">
@@ -53,50 +54,104 @@
                         <div class="logo-element">IN+</div>
                     </li>
 
-<!-- Menu Items -->
-<li class="{{ request()->routeIs('dashboard.index') ? 'active' : '' }}">
-    <a href="{{ route('admin.dashboard') }}">
-        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-    </a>
-</li>
+                    <!-- Menu Items -->
+                    <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('admin.dashboard') }}">
+                            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                        </a>
+                    </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('wardens.index') }}">
-        <i class="fas fa-user-shield"></i> Wardens
-    </a>
-</li>
+                    <!-- Wardens Management -->
+                    <li class="{{ request()->routeIs('admin.wardens.*') ? 'active' : '' }}">
+                        <a href="#"><i class="fas fa-user-shield"></i> <span class="nav-label">Wardens</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="{{ request()->routeIs('admin.wardens.index') && !request()->has('filter') ? 'active' : '' }}">
+                                <a href="{{ route('admin.wardens.index') }}">All Wardens</a>
+                            </li>
+                            <li class="{{ request()->routeIs('admin.wardens.index') && request('filter') == 'on-duty' ? 'active' : '' }}">
+                                <a href="{{ route('admin.wardens.index', ['filter' => 'on-duty']) }}">
+                                    <span class="text-success">On-duty</span> Wardens
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
-<li class="{{ request()->routeIs('incident-reports.index') ? 'active' : '' }}">
-    <a href="{{ route('incident-reports.index') }}">
-        <i class="fa fa-flag"></i> <span>Incident Reports</span>
-    </a>
-</li>
+                    <!-- Areas Management -->
+                    <li class="{{ request()->routeIs('admin.areas.*') ? 'active' : '' }}">
+                        <a href="#"><i class="fas fa-map-marker-alt"></i> <span class="nav-label">Areas</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="{{ request()->routeIs('admin.areas.index') ? 'active' : '' }}">
+                                <a href="{{ route('admin.areas.index') }}">All Areas</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.warden.areas', ['warden' => Auth::id()]) }}">Assigned Areas</a>
+                            </li>
+                            <li class="{{ request()->routeIs('admin.areas.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.areas.create') }}">Create Area</a>
+                            </li>
+                        </ul>
+                    </li>
 
-<li class="{{ request()->routeIs('shifts.index') ? 'active' : '' }}">
-    <a href="{{ route('shifts.index') }}">
-        <i class="fas fa-clock"></i></i> <span>Shift Management</span>
-    </a>
-</li>
+                    <!-- Task Management -->
+                    <li class="{{ request()->routeIs('admin.tasks.*') ? 'active' : '' }}">
+                        <a href="#"><i class="fas fa-tasks"></i> <span class="nav-label">Tasks</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="{{ request()->routeIs('admin.tasks.index') && !request()->has('filter') ? 'active' : '' }}">
+                                <a href="{{ route('admin.tasks.index') }}">All Tasks</a>
+                            </li>
+                            <li class="{{ request()->routeIs('admin.tasks.index') && request('filter') == 'pending' ? 'active' : '' }}">
+                                <a href="{{ route('admin.tasks.index', ['filter' => 'pending']) }}">
+                                    <span class="text-warning">Pending</span> Tasks
+                                </a>
+                            </li>
+                            <li class="{{ request()->routeIs('admin.tasks.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.tasks.create') }}">Create Task</a>
+                            </li>
+                        </ul>
+                    </li>
 
+                    <!-- Alert Management -->
+                    <li class="{{ request()->routeIs('admin.alerts.*') ? 'active' : '' }}">
+                        <a href="#"><i class="fas fa-bell"></i> <span class="nav-label">Alerts</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="{{ request()->routeIs('admin.alerts.index') ? 'active' : '' }}">
+                                <a href="{{ route('admin.alerts.index') }}">All Alerts</a>
+                            </li>
+                            <li class="{{ request()->routeIs('admin.alerts.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.alerts.create') }}">Create Alert</a>
+                            </li>
+                        </ul>
+                    </li>
 
+                    <li class="{{ request()->routeIs('incident-reports.index') ? 'active' : '' }}">
+                        <a href="{{ route('incident-reports.index') }}">
+                            <i class="fa fa-flag"></i> <span>Incident Reports</span>
+                        </a>
+                    </li>
 
-<li class="{{ request()->routeIs('teams.index') ? 'active' : '' }}">
-    <a href="{{ route('teams.index') }}">
-        <i class="fa fa-users"></i> <span>Teams</span>
-    </a>
-</li>
+                    <li class="{{ request()->routeIs('shifts.index') ? 'active' : '' }}">
+                        <a href="{{ route('shifts.index') }}">
+                            <i class="fas fa-clock"></i> <span>Shift Management</span>
+                        </a>
+                    </li>
 
-<li class="{{ request()->routeIs('roles.index') ? 'active' : '' }}">
-    <a href="{{ route('roles.index') }}">
-        <i class="fa fa-id-badge"></i> <span>Roles</span>
-    </a>
-</li>
+                    <li class="{{ request()->routeIs('teams.index') ? 'active' : '' }}">
+                        <a href="{{ route('teams.index') }}">
+                            <i class="fa fa-users"></i> <span>Teams</span>
+                        </a>
+                    </li>
 
-<li class="{{ request()->routeIs('settings.index') ? 'active' : '' }}">
-    <a href="{{ route('settings.index') }}">
-        <i class="fa fa-cogs"></i> <span>Settings</span>
-    </a>
-</li>
+                    <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }}">
+                        <a href="{{ route('roles.index') }}">
+                            <i class="fa fa-id-badge"></i> <span>Roles</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                        <a href="{{ route('settings.index') }}">
+                            <i class="fa fa-cogs"></i> <span>Settings</span>
+                        </a>
+                    </li>
 
                 </ul>
             </div>
@@ -107,8 +162,8 @@
             <div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0; background: #2f4050;">
                    <div class="navbar-header">
-    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i></a>
-</div>
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i></a>
+                    </div>
 
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
@@ -123,10 +178,10 @@
                 </nav>
             </div>
 
-{{-- Content Sections --}}
-@yield('content-heading')
-@yield('content')
-@yield('footer')
+            {{-- Content Sections --}}
+            @yield('content-heading')
+            @yield('content')
+            @yield('footer')
 
         </div>
     </div>
@@ -146,11 +201,66 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <script>
-        $('body.canvas-menu .sidebar-collapse').slimScroll({
-            height: '100%',
-            railOpacity: 0.9
+        $(document).ready(function() {
+            // Initialize slimScroll for sidebar
+            $('body.canvas-menu .sidebar-collapse').slimScroll({
+                height: '100%',
+                railOpacity: 0.9
+            });
+            
+            // Initialize MetisMenu for proper dropdown functionality
+            $('#side-menu').metisMenu({
+                toggle: true,
+                preventDefault: true,
+                activeClass: 'active',
+                collapseClass: 'collapse',
+                collapseInClass: 'in',
+                collapsedClass: 'collapsed',
+                hasArrowClass: 'has-arrow',
+                parentClass: 'mm-parent',
+                activeClass: 'mm-active'
+            });
+            
+            // Additional manual handling for dropdowns
+            $('#side-menu > li > a').on('click', function(e) {
+                var $this = $(this);
+                var $parent = $this.parent('li');
+                var $submenu = $this.next('.nav-second-level');
+                
+                // Only handle if this has a submenu
+                if ($submenu.length > 0) {
+                    e.preventDefault();
+                    
+                    // Close all other open submenus
+                    $('#side-menu .nav-second-level').not($submenu).slideUp(200);
+                    $('#side-menu > li').not($parent).removeClass('active');
+                    
+                    // Toggle current submenu
+                    if ($submenu.is(':visible')) {
+                        $submenu.slideUp(200);
+                        $parent.removeClass('active');
+                    } else {
+                        $submenu.slideDown(200);
+                        $parent.addClass('active');
+                    }
+                }
+            });
+            
+            // Prevent submenu item clicks from closing the dropdown
+            $('#side-menu .nav-second-level a').on('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Keep active menu open on page load
+            $('#side-menu li.active').each(function() {
+                var $submenu = $(this).find('.nav-second-level');
+                if ($submenu.length > 0) {
+                    $submenu.show();
+                }
+            });
         });
 
+        // Handle file upload size errors
         (function () {
             const originalFetch = window.fetch;
             window.fetch = async function (url, options = {}) {
@@ -171,13 +281,15 @@
             };
         })();
     </script>
+    
     <!-- Leaflet JS -->
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-o9N1jKw1jM0xP8jLu7AG9Ndy3P4dNSnsi9Nnb5OguTY="
-  crossorigin=""
-></script>
-@stack('scripts')
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-o9N1jM0xP8jLu7AG9Ndy3P4dNSnsi9Nnb5OguTY==" 
+      crossorigin=""
+    ></script>
+    
+    @stack('scripts')
 
 </body>
 </html>
